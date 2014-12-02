@@ -1,0 +1,69 @@
+\documentclass[11pt,a4paper,twoside,openright]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+
+
+\usepackage{parskip}
+\usepackage{fancyhdr}
+
+\title{Multi'omics analysis: three month report}
+\author{Michal Grochmal
+  $<$\href{mailto:grochmal@member.fsf.org}{grochmal@member.fsf.org}$>$\\
+  \\
+  Department of Electronic Engineering and Computer Science\\
+  Queen Mary University of London
+}
+\date{\today}
+
+\usepackage[ colorlinks=true
+           , plainpages=false
+           , pdfpagelabels
+           , pageanchor=false ]{hyperref}
+
+\begin{document}
+\maketitle
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
+
+
+\pagestyle{fancy}
+\lhead{}
+\chead{MULTI'OMICS ANALYSIS: THREE MONTH REPORT}
+\rhead{}
+
+\begin{abstract}
+Experimental data of a single set of runs of one experiment can prove tricky to
+interpret, yet in most single experiments we expect a result confirming or
+denying a predefined hypothesis.  Building interpretations on data from several
+experiments at once faces extra issues: huge dimensionality if we just
+concatenate the data, missing data in different places across the different
+experiments and correlation of the measures provided by each experiment.
+Classical and recent methods to integrate data from several sources may prove
+effective to conquer these difficulties.  We evaluate known methods of scaling,
+clustering and regression in the task of integrating such sources.
+\begin{flushright}
+\emph{Similia similibus curantur -- Paracelsus}
+\end{flushright}
+\end{abstract}
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\chapter{Introduction}
+
+\end{document}
+
