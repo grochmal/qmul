@@ -5,7 +5,6 @@
 \usepackage{lmodern}
 \usepackage{textcomp}
 
-
 \usepackage{parskip}
 \usepackage{fancyhdr}
 
@@ -23,6 +22,8 @@
            , pdfpagelabels
            , pageanchor=false ]{hyperref}
 
+\setlength{\headheight}{16pt}
+
 \begin{document}
 \maketitle
 
@@ -30,7 +31,6 @@
 \null
 \thispagestyle{empty}
 \newpage
-
 
 \pagestyle{fancy}
 \lhead{}
@@ -41,12 +41,12 @@
 Experimental data of a single set of runs of one experiment can prove tricky to
 interpret, yet in most single experiments we expect a result confirming or
 denying a predefined hypothesis.  Building interpretations on data from several
-experiments at once faces extra issues: huge dimensionality if we just
-concatenate the data, missing data in different places across the different
-experiments and correlation of the measures provided by each experiment.
-Classical and recent methods to integrate data from several sources may prove
-effective to conquer these difficulties.  We evaluate known methods of scaling,
-clustering and regression in the task of integrating such sources.
+experiments at once faces extra issues: high dimensionality if we concatenate
+the data, missing data in different measures across the different experiments
+and correlation of the measures provided by each experiment.  Classical and
+recent methods to integrate data from several sources may prove effective to
+conquer these difficulties.  We evaluate known methods of scaling, clustering
+and regression in the task of integrating such sources.
 \begin{flushright}
 \emph{Similia similibus curantur -- Paracelsus}
 \end{flushright}
@@ -64,6 +64,161 @@ clustering and regression in the task of integrating such sources.
 % clever trick to clear the pages before chapter openings
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Introduction}
+
+Why is data integration useful?  Texts that use data integration rarely provide
+real world examples, which are often intuitive to understand, this leaves the
+usefulness of data integration hidden in complex terms.  Lets think of a
+situation where plain classification would perform badly, but an classification
+on integrated data will have better results:  Imagine we are trying to classify
+several \emph{motor vehicles} into "sport vehicles" and "no-sport vehicles",
+our entire set of vehicles is composed of models of cars and motorbikes
+containing the data from their manufacturer website; the data is labeled with
+the class names "sport" and "non-sport".  The complication is that measures
+that distinguish sport cars from non-sport cars are often different from the
+measures that distinguish sport bikes from non-sport bikes, e.g. sport cars are
+heavier than most cars whilst sport bikes are lighter than most bikes.
+
+Vertical concatenation (a union in relational algebra) of measures for cars and
+bikes will result if a very low classification performance.  Horizontal
+concatenation (a projection in relational algebra) of the measures might result
+in better classification but still lower than if we integrate the data.  Within
+the example about cars and motorbikes we can finally define \emph{what
+integration of data means}:  We try to understand the correlation (or another
+measure of similarity) between the measures in two (or more) related datasets
+(car features and motorbike features), from this understanding we give high
+weights to the measures that are positively correlated and give low weights to
+the measures that are negatively correlated between the sets.  The weight of
+the vehicle is an example of a measure that is negatively correlated between
+cars and motorbikes in the context of "sport vehicle" and "not sport vehicle"
+classification;  This is because heavier cars tend to be sport cars and lighter
+motorbikes tend to be sport bikes.  On the other hand, the measure of wheel
+diameter is positively correlated as both sport cars and sport bikes tend to
+have bigger wheels than non-sport ones.
+
+The cars and motorbikes classification above is one case where data integration
+is useful.  Another example, still using vehicles would be to \emph{integrate
+data from various sources about the same vehicle}, taking into consideration
+only cars for example.  This second example is a different scenario because we
+are not integrating two datasets of different points in space, we are
+integrating two datasets that use the same set of points in space but different
+sets of measures.  In the first example one dataset contains data about cars
+such as "Subaru 20" or "Mazda 1.5" and the other dataset contains data about
+motorbikes such as "Java 350cc" or "Kawasaki Marauder".  The second scenario
+integrates a dataset that has measures for "Subaru 20" and "Mazda 1.5" with
+another dataset that contains different measures for the same "Subaru 20" and
+"Mazda 1.5" models.
+
+Imagine we will integrate data from several sources about a single car (we
+forget about motorbikes for a moment) and then classify it as \emph{sport} or
+\emph{non-sport} vehicle.  The data integration in this second example is not
+happening between different types of vehicles but between different sources of
+information for a single vehicle.  Lets try to build a classifier for
+\emph{sport} and \emph{non-sport} cars based on vehicle data from the
+manufacturer website, from an evaluation website (a website that makes rankings
+of cars) and from a forum of car enthusiasts.
+
+The data from the manufacturer website, the evaluation website and the forum is
+collected for each car model.  Vertical concatenation does not make sense in this
+case, because each model will be present in the result of the concatenation
+three times, also the measures cannot be inserted into the same columns when
+coming from different sources.  Horizontal concatenation will produce a set
+where the number of measures might be high.  e.g. We could collect the data for
+16 car models from the three websites, from the vendor we collected 7 measures,
+from the evaluation we collected 10 measures and from the forum we collected 5
+measures;  After horizontal concatenation the resulting dataset has 16 data
+points (car models) and 32 measures.  Classification in a set where the number
+of dimensions (measures) is bigger than the number of data points is often bad,
+this is called the problem of high dimensionality.
+
+One way to overcome the high dimensionality problem is to build three
+classifiers:  one classifier for the measures from the manufacturer website,
+one classifier for the evaluation website and one classifier for the forum
+data.  The final classifier will then use the result (sport or non-sport) of
+each of the three classifiers and decide based on the majority vote.  This is
+an ensemble approach for integration.
+
+In data integration terms the approaches used in the vertical and horizontal
+concatenation in the classification of both cars and motorbikes, and in the
+horizontal concatenation of the car data from multiple sources are called early
+integration.  The application of weights to different measures of cars and
+motorbikes (based on the correlation) in the first example is an intermediate
+integration technique.  And finally the ensemble approach is called a late
+integration.
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\chapter{Integration}
+
+Data integration is not a technique by itself, it is a collection of more or
+less related techniques that perform operations on data from several sources
+with the objective of bestowing classification accuracy on these sources.  The
+integration is needed as simple concatenation of data often become problematic.
+Simple techniques as concatenation followed by dimensionality reduction are a
+form of data integration.
+
+We can divide data integration into early integration, which combines the data
+before performing any operation of it (not counting normalisation).  Late
+integration, which combines classification results from classifiers on each of
+the data sources instead of combining the data itself.  And intermediate
+integration which performs operations on data after or during the process when
+the data is combined together but before the data is classified.
+
+\section{Purpose}
+
+Several areas benefit from methods of data integration.  Any area where we need
+to combine data from diverse sources, either as separate observations or as
+different measures about the same observations, can be understood differently
+with early, intermediate or late integration.  Experimental data from areas of
+science is one such are that could benefit from the integration.  One of the
+biggest datasets that is openly available are biological databases of
+multi'omics.  High dimensionality (as we have seen in the introduction) is a
+common problem in the multi'omics.  Also, multi'omics present several other
+problems: missing data for certain observations and lack of real world,
+intuitive, models for the relations between data.
+
+Another, not data integration related, problem of the multi'omics data is a
+lack of standard formats for the data.  Standards do exist, but there are
+hundreds of them and not all databases of multi'omics data follow at least one
+standard.  Even more, some of the standard formats are human readable, but not
+machine readable.  This is a huge computational problem of the processing of the
+data.
+
+For example, imagine the central London laboratory will perform blood tests for
+all London citizens registered in London GPs.  The GPs are asked to collect
+blood from the patients but are not told which procedure to follow when
+collecting the blood.  Some GPs collect the blood of the patients in the
+morning, some others after lunch, even other GPs tell the patients to not eat
+for 12 hours before blood collection.  Each GP sends the blood samples and a
+letter describing how the blood was collected.  The central London laboratory
+cannot perform all blood test after receiving the blood because different tests
+have different requirements of the time a patient remained without eating.
+Yet, experts at the laboratory can guess from the letter sent by the GP which
+blood tests can be performed for each patient.  If all possible tests were
+performed on all samples the results would be meaningless.
+
+A computer would not be capable to decide which tests can be performed as it
+does not have an expert knowledge and it cannot understand natural language,
+especially in an expert context.  The GP analogy reflects the multi'omics
+databases, these databases are made for the human reader.  A human expert needs
+to evaluate the provenience and location of the data and, only then, decide
+what can be done with that data.  When standardised these databases are
+standardised for a human reader not for a machine.
+
+The work of standardising the multi'omics databases is out of the  scope of
+this work.  We focus on the methods for data integration, therefore we assume
+we posses, and understand, the data on which we work.
+
+\section{Methods}
+
+Methods for early and late integration
+
+Plain Clustering: clustering (k-means) and then mixing
+
+Euclidean Distance: MDS, SNF
+
+Graph based: SNF, spectral clustering
+
+Vectors: PLS
 
 \end{document}
 
