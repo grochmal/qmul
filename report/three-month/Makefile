@@ -2,7 +2,7 @@
 LATEX  = pdflatex
 BIBTEX = bibtex
 RM     = rm -f
-BIB    = biblio.bib
+BIB    = threem.bib
 LTFS   = *.aux *.lof *.log *.lot *.fls *.out *.toc
 DOCS   = *.dvi *.pdf
 BIBS   = *.bbl *.blg
@@ -11,7 +11,9 @@ OTHER  = *.acn *.acr *.glg *.glo *.gls *.brf *.lol
 
 all: three-month.pdf
 
-%.pdf: %.tex # %.bbl
+three: three-month.pdf
+
+%.pdf: %.tex %.bbl
 	$(LATEX) $<
 	$(LATEX) $<
 
@@ -26,3 +28,4 @@ all: three-month.pdf
 .PHONY: clean
 clean:
 	$(RM) $(LTFS) $(DOCS) $(BIBS) $(IDXS) $(OTHER)
+

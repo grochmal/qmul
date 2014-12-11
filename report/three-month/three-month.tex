@@ -7,6 +7,9 @@
 
 \usepackage{parskip}
 \usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{booktabs}
+%\usepackage[table]{xcolor}
 
 \title{Multi'omics analysis: three month report}
 \author{Michal Grochmal
@@ -15,7 +18,7 @@
   Department of Electronic Engineering and Computer Science\\
   Queen Mary University of London
 }
-\date{\today}
+\date{December 2014}
 
 \usepackage[ colorlinks=true
            , plainpages=false
@@ -118,107 +121,224 @@ manufacturer website, from an evaluation website (a website that makes rankings
 of cars) and from a forum of car enthusiasts.
 
 The data from the manufacturer website, the evaluation website and the forum is
-collected for each car model.  Vertical concatenation does not make sense in this
-case, because each model will be present in the result of the concatenation
-three times, also the measures cannot be inserted into the same columns when
-coming from different sources.  Horizontal concatenation will produce a set
-where the number of measures might be high.  e.g. We could collect the data for
-16 car models from the three websites, from the vendor we collected 7 measures,
-from the evaluation we collected 10 measures and from the forum we collected 5
-measures;  After horizontal concatenation the resulting dataset has 16 data
-points (car models) and 32 measures.  Classification in a set where the number
-of dimensions (measures) is bigger than the number of data points is often bad,
-this is called the problem of high dimensionality.
+collected for each car model.  \emph{Vertical concatenation} does not make
+sense in this case, because each model would be present in the result of the
+concatenation three times.  Also, the measures cannot be inserted into the same
+columns when coming from different sources.  \emph{Horizontal concatenation}
+will produce a set where the number of measures might be high.  e.g. We could
+collect the data for a total of 16 car models from the three websites; from the
+vendor we collect 7 measures, from the evaluation we collect 10 measures and
+from the forum we collect 5 measures for each model.  After horizontal
+concatenation the resulting dataset has 16 data points (car models) and 32
+measures.  Classification in a set where the number of dimensions (measures) is
+bigger than the number of data points is often bad, this is called the problem
+of high dimensionality.
 
 One way to overcome the high dimensionality problem is to build three
 classifiers:  one classifier for the measures from the manufacturer website,
 one classifier for the evaluation website and one classifier for the forum
-data.  The final classifier will then use the result (sport or non-sport) of
-each of the three classifiers and decide based on the majority vote.  This is
-an ensemble approach for integration.
+data.  The final classifier will then use the result (\emph{sport} or
+\emph{non-sport}) of each of the three classifiers and decide based on the
+majority vote.  This is an \emph{ensemble} approach for integration.
 
 In data integration terms the approaches used in the vertical and horizontal
-concatenation in the classification of both cars and motorbikes, and in the
-horizontal concatenation of the car data from multiple sources are called early
-integration.  The application of weights to different measures of cars and
-motorbikes (based on the correlation) in the first example is an intermediate
-integration technique.  And finally the ensemble approach is called a late
-integration.
+concatenations in the classification of both cars and motorbikes, and in the
+horizontal concatenation of the car data from multiple sources are all called
+\emph{early integration}.  The application of weights to different measures of
+cars and motorbikes (based on the correlation) in the first example is an
+\emph{intermediate integration} technique.  And finally the ensemble approach
+is called a \emph{late integration}.
 
 % clever trick to clear the pages before chapter openings
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Integration}
 
 Data integration is not a technique by itself, it is a collection of more or
-less related techniques that perform operations on data from several sources
-with the objective of bestowing classification accuracy on these sources.  The
-integration is needed as simple concatenation of data often become problematic.
-Simple techniques as concatenation followed by dimensionality reduction are a
-form of data integration.
+less related techniques that perform \emph{operations on data from several
+sources} with the objective of \emph{bestowing classification accuracy} on
+these sources.  The integration is needed as simple concatenation of data often
+become problematic.  Techniques as concatenation followed by dimensionality
+reduction are a simple form of data integration.
 
 We can divide data integration into early integration, which combines the data
-before performing any operation of it (not counting normalisation).  Late
-integration, which combines classification results from classifiers on each of
-the data sources instead of combining the data itself.  And intermediate
-integration which performs operations on data after or during the process when
-the data is combined together but before the data is classified.
+\emph{before} performing any operation on it (not counting the normalisation of
+the data).  Late integration, which \emph{combines classification results} from
+classifiers on each of the data sources instead of combining the data itself.
+And intermediate integration which first performs several operations on the
+data, combining it \emph{into a single data set}, and then performs
+classification on the entirety of the data.
 
 \section{Purpose}
 
 Several areas benefit from methods of data integration.  Any area where we need
-to combine data from diverse sources, either as separate observations or as
-different measures about the same observations, can be understood differently
-with early, intermediate or late integration.  Experimental data from areas of
-science is one such are that could benefit from the integration.  One of the
-biggest datasets that is openly available are biological databases of
-multi'omics.  High dimensionality (as we have seen in the introduction) is a
-common problem in the multi'omics.  Also, multi'omics present several other
-problems: missing data for certain observations and lack of real world,
-intuitive, models for the relations between data.
+to combine data from diverse sources (either as separate observations or as
+different measures about the same observations) can benefit from
+differentiating the integration of data performed by early, intermediate or
+late integration.  Experimental data from areas of science is one such area
+that benefit from different ways of putting the data together.  One of the
+biggest experimental datasets that is openly available are \emph{biological
+databases} of multi'omics.  High dimensionality (as we have seen in the
+introduction) is a common problem in the multi'omics.  Also, multi'omics
+present several other problems: missing data for certain observations and lack
+of real world, intuitive, models for the relations between data.
 
 Another, not data integration related, problem of the multi'omics data is a
 lack of standard formats for the data.  Standards do exist, but there are
-hundreds of them and not all databases of multi'omics data follow at least one
-standard.  Even more, some of the standard formats are human readable, but not
-machine readable.  This is a huge computational problem of the processing of the
-data.
+hundreds of them and not all databases of multi'omics data follow them
+strictly.  Even more, some of the standard formats are human readable, but
+\emph{not machine readable}.  This is a huge computational problem of the
+processing of the data.
 
-For example, imagine the central London laboratory will perform blood tests for
-all London citizens registered in London GPs.  The GPs are asked to collect
-blood from the patients but are not told which procedure to follow when
+For example, imagine that the central London laboratory will perform blood
+tests for all London citizens registered in London GPs (General Practice
+medical posts).  The GPs are asked to collect blood from all patients
+registered with them but are \emph{not told the procedure} to follow when
 collecting the blood.  Some GPs collect the blood of the patients in the
 morning, some others after lunch, even other GPs tell the patients to not eat
 for 12 hours before blood collection.  Each GP sends the blood samples and a
 letter describing how the blood was collected.  The central London laboratory
-cannot perform all blood test after receiving the blood because different tests
-have different requirements of the time a patient remained without eating.
-Yet, experts at the laboratory can guess from the letter sent by the GP which
-blood tests can be performed for each patient.  If all possible tests were
-performed on all samples the results would be meaningless.
+cannot perform all blood test after receiving the blood, because different
+tests have different requirements of the time a patient remained without
+eating.  Yet, \emph{experts} at the laboratory can guess from the letter sent
+by the GP which blood tests can be performed for each patient.  If all possible
+tests were performed on all samples the results would be meaningless.
 
 A computer would not be capable to decide which tests can be performed as it
-does not have an expert knowledge and it cannot understand natural language,
-especially in an expert context.  The GP analogy reflects the multi'omics
-databases, these databases are made for the human reader.  A human expert needs
-to evaluate the provenience and location of the data and, only then, decide
-what can be done with that data.  When standardised these databases are
-standardised for a human reader not for a machine.
+does not have the expert's knowledge and it cannot understand the \emph{natural
+language} letters are written in, especially in an expert context.  This GP
+analogy reflects the multi'omics databases organisation, these databases are
+made for the human reader.  A human expert needs to evaluate the provenience
+and location of the data and, only then, decide what can be done with that
+data.  These databases are standardised for a human reader not for a machine
+reader.
 
-The work of standardising the multi'omics databases is out of the  scope of
-this work.  We focus on the methods for data integration, therefore we assume
-we posses, and understand, the data on which we work.
+The work of standardising the multi'omics databases is out of the scope of this
+work, although it is a huge problem in the multi'omics area.  We focus on the
+methods for data integration, therefore we assume that we \emph{posses}, and
+understand, the data on which we work.
 
 \section{Methods}
 
-Methods for early and late integration
+Methods for early integration are comprised of concatenating and normalising
+the data.  Late integration is most often performed by ensemble methods, these
+use different ways of evaluating the results of each classification, e.g.
+majority vote or cumulative vote.  Yet techniques for \emph{intermediate
+integration} are more diverse.  Table \ref{tab:tech} summarises some methods
+for intermediate integration.
 
-Plain Clustering: clustering (k-means) and then mixing
+\begin{table}[hp]
+\centering
+%\rowcolors{3}{}{lightgray}
+\begin{tabular}{|l|l|l|}
+\toprule
+Technique & \multirow{2}{0.3\textwidth}{Technique}
+          & \multirow{2}{0.39\textwidth}{Characteristics} \\
+Type & & \\
+\midrule
 
-Euclidean Distance: MDS, SNF
+\multirow{6}{0.2\textwidth}{Clustering}
+& \multirow{6}{0.3\textwidth}{Parallel clustering\cite{greene2008}}
+  & Use k-means to generate \\
+& & clusters from each \\
+& & data source. \\
+\cline{3-3}
+& & Mix the clusters, \\
+& & using convolutely \\
+& & explained techniques. \\
+\hline
 
-Graph based: SNF, spectral clustering
+\multirow{6}{0.2\textwidth}{Euclidean distance}
+& \multirow{6}{0.3\textwidth}{Multidimensional scaling\cite{kruskal1978}}
+  & Uses euclidean distance \\
+& & between the data points. \\
+\cline{3-3}
+& & Minimises the error \\
+& & of achieving the same \\
+& & distances in a smaller \\
+& & number of dimensions. \\
+\hline
 
-Vectors: PLS
+\multirow{10}{0.2\textwidth}{Graph based}
+& \multirow{7}{0.3\textwidth}{Similarity network fusion\cite{wang2014}}
+  & Weighted edges \\
+& & representing pairwise \\
+& & distances between \\
+& & data points. \\
+\cline{3-3}
+& & Mix edge weights \\
+& & between the sources \\
+& & being integrated. \\
+\cline{2-3}
+& \multirow{3}{0.3\textwidth}{Spectral clustering\cite{luxburg2007}}
+  & Uses laplacian matrix\\
+& & for representation \\
+& & of the graph. \\
+\hline
+
+\multirow{2}{0.2\textwidth}{Bayesian}
+& \multirow{2}{0.3\textwidth}{Bayesian correlation\cite{kirk2012}}
+  & Uses a Bayesian \\
+& & network \\
+\hline
+
+\multirow{9}{0.2\textwidth}{Vectorial space}
+& \multirow{9}{0.3\textwidth}{Partial least squares\cite{siongng2013}}
+  & Maximum variance \\
+& & is calculated \\
+& & in vectorial space. \\
+\cline{3-3}
+& & The maximum variance \\
+& & is removed and \\
+& & a new maximum is \\
+& & recalculated, until \\
+& & all dimensions are \\
+& & accounted for. \\
+
+\bottomrule
+\end{tabular}
+\caption{Classification of techniques used in data integration.}
+\label{tab:tech}
+\end{table}
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\bibliographystyle{plain}
+\bibliography{threem}
+
+\appendix
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\chapter{Plan A}
+
+1st half of January: replicate SNF on GBM data
+
+2nd half of January: apply MDS to the same data
+
+1st half of February: graph both techniques
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\chapter{Plan B}
+
+1st half of January: replicate SNF on GBM data
+
+2nd half of January: make a model of distributed SNF
+
+1st half of February: check if the distributed model is properly distributed
+
+2nd half of February: check if the distributed model is resistant to failures
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\chapter{Plan C}
+
+1st half of January: understand assembler construction of ELF objects
+
+2nd half of January: build a couple of test programs hand linked into ELFs
+
+1st half of February: build a prototype kernel that can start from a bootloader
+and then HALT the machine.
 
 \end{document}
 
