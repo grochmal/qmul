@@ -7,13 +7,20 @@ LTFS   = *.aux *.lof *.log *.lot *.fls *.out *.toc
 DOCS   = *.dvi *.pdf
 BIBS   = *.bbl *.blg
 IDXS   = *.idx *.ilg *.ind *.ist
+BEAM   = *.nav *.snm
 OTHER  = *.acn *.acr *.glg *.glo *.gls *.brf *.lol
 
-all: three-month.pdf
+all: three-month.pdf pres.pdf
 
+.PHONY: three pres
 three: three-month.pdf
+pres: pres.pdf
 
-%.pdf: %.tex %.bbl
+three-month.pdf: three-month.tex three-month.bbl
+	$(LATEX) $<
+	$(LATEX) $<
+
+%.pdf: %.tex
 	$(LATEX) $<
 	$(LATEX) $<
 
@@ -27,5 +34,5 @@ three: three-month.pdf
 
 .PHONY: clean
 clean:
-	$(RM) $(LTFS) $(DOCS) $(BIBS) $(IDXS) $(OTHER)
+	$(RM) $(LTFS) $(DOCS) $(BIBS) $(IDXS) $(BEAM) $(OTHER)
 

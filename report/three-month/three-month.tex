@@ -39,6 +39,9 @@
 \lhead{}
 \chead{MULTI'OMICS ANALYSIS: THREE MONTH REPORT}
 \rhead{}
+%\lfoot[\thepage]{}
+%\cfoot{}
+%\rfoot[]{\thepage}
 
 \begin{abstract}
 Experimental data of a single set of runs of one experiment can prove tricky to
@@ -235,6 +238,7 @@ Technique & \multirow{2}{0.3\textwidth}{Technique}
           & \multirow{2}{0.39\textwidth}{Characteristics} \\
 Type & & \\
 \midrule
+\midrule
 
 \multirow{6}{0.2\textwidth}{Clustering}
 & \multirow{6}{0.3\textwidth}{Parallel clustering\cite{greene2008}}
@@ -311,34 +315,101 @@ Type & & \\
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Plan A}
 
-1st half of January: replicate SNF on GBM data
+The lack of a measurable plan hindered the work until now.  A lack of a plan
+often leaves the work stalled at unnecessary points or leaves the executioner
+(me) lost on what to do next.  A plan for to push the work forward that I
+propose is as follows:
 
-2nd half of January: apply MDS to the same data
+\begin{description}
+\item[1st half of January] \hfill \\
+Replicate the similarity network (SNF) fusion on the glioblastoma (GBM) and
+lung data, that is available from the external resources of that work.
 
-1st half of February: graph both techniques
+\item[2nd half of January] \hfill \\
+Apply Multidimensional scaling to each GBM and lung data.  Graph the achieved
+dimensionality on each dataset.
+
+\item[1st half of February] \hfill \\
+Graph both techniques together.  Find a sensible hypothesis about the how the
+dimensionality is treated by both methods.
+
+\item[2nd half of February] \hfill \\
+Apply partial least squares to each GBM and lung data.  Graph the most
+important dimensions.
+
+\item[1st half of March] \hfill \\
+No clue, really.  I have no idea of what to do with a theoretical hypothesis.
+And that \emph{is} a problem that I need help with.
+\end{description}
 
 % clever trick to clear the pages before chapter openings
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Plan B}
 
-1st half of January: replicate SNF on GBM data
+Another possibility is a plan within my area of \emph{"big data"}, which is
+parallelization.  It is a plan I can better describe:
 
-2nd half of January: make a model of distributed SNF
+\begin{description}
+\item[1st half of January] \hfill \\
+Replicate the similarity network (SNF) fusion on the glioblastoma (GBM) and
+lung data, that is available from the external resources of that work.
 
-1st half of February: check if the distributed model is properly distributed
+\item[2nd half of January] \hfill \\
+Construct a model of a distributed SNF.  Make one or two diagrams on how such
+model might work.
 
-2nd half of February: check if the distributed model is resistant to failures
+\item[1st half of February] \hfill \\
+Implement the distributed SNF.
+
+\item[2nd half of February] \hfill \\
+Check if the distributed model is properly distributed, i.e. check if a similar
+load of work is performed by distinct agents.
+
+\item[1st half of March] \hfill \\
+Check if the distributed model is resistant to failures, i.e. construct
+extensive cases of agent failure.
+
+\item[2nd half of March] \hfill \\
+Look for possible optimisations in both the design and implementation.
+
+\item[1st half of April] \hfill \\
+Documentation.
+
+\end{description}
 
 % clever trick to clear the pages before chapter openings
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Plan C}
 
-1st half of January: understand assembler construction of ELF objects
+As an argument against the previous plan being an \emph{engineering plan} this
+appendix presents an actual engineering plan (that would be quite interesting
+to execute):
 
-2nd half of January: build a couple of test programs hand linked into ELFs
+\begin{description}
+\item[1st half of January] \hfill \\
+Understand assembler header construction of Executable and Linkable Format
+(ELF) objects.
 
-1st half of February: build a prototype kernel that can start from a bootloader
-and then HALT the machine.
+\item[2nd half of January] \hfill \\
+Build a couple of test programs hand linked into ELFs.
+
+\item[1st half of February] \hfill \\
+Mount a test environment for a kernel.  The test environment will be a virtual
+machine prepared with a bootloader, the machine shall be able to boot from
+several kernels.
+
+\item[2nd half of February] \hfill \\
+Build a prototype kernel that can start from a bootloader and then HALT the
+machine.
+
+\item[1st half of March] \hfill \\
+Test the prototype kernel on the test environment.  Given the little
+possibility of debugging in this phase it will trigger several cycles of
+rebuild install and test.
+
+\item[2nd half of March] \hfill \\
+Build keyboard interrupt handles into the prototype kernel.
+\end{description}
 
 \end{document}
 
