@@ -9,6 +9,10 @@
 *.out
 *.toc
 
+# latex beamer
+*.nav
+*.snm
+
 # latex indexes
 *.idx
 *.ilg

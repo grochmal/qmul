@@ -5,6 +5,8 @@
 \usepackage{lmodern}
 \usepackage{textcomp}
 
+\usepackage{multirow}
+
 \mode<presentation>
 {
   \usetheme{Warsaw}
@@ -34,7 +36,237 @@
 
 \subsection{Why is it useful?}
 \begin{frame}{Why is it useful?}
-  Write something here
+  \begin{itemize}
+    \item Classifiers may need to be built for problems for which data has not
+          a single well defined source
+    \item What we do with the data before we apply the classification can vary
+    \item Normalisation can be a (super simple) example of how operations
+          before running the classifiers influence results
+    \item In general we use integration techniques to improve classification
+          accuracy
+  \end{itemize}
+\end{frame}
+
+\subsection{Multiple data points}
+\begin{frame}{Cars and Motorbikes}
+  \begin{block}{Car data}
+    \begin{tabular}{l|r|rr}
+    Car & Sport & Weight (kg) & Wheel diameter (mm) \\
+    \hline
+    Mazda 1.5 & 0 & 1550 & 730 \\
+    Subaru 20 & 1 & 2100 & 832 \\
+    \hline
+    \end{tabular}
+  \end{block}
+  \begin{block}{Motorbike data}
+    \begin{tabular}{l|r|rr}
+    Motorbike & Sport & Weight (kg) & Wheel diameter (mm) \\
+    \hline
+    Kawasaki   & \multirow{2}{*}{0}
+               & \multirow{2}{*}{550}
+               & \multirow{2}{*}{912} \\
+    Marauder   & & & \\
+    Java 350cc & 1 &  312 & 1010 \\
+    \hline
+    \end{tabular}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Integration by conatenation}
+  \begin{block}{Vertical concatenation $(\cup)$}
+    \begin{tabular}{l|r|rr}
+    Vehicle & Sport & Weight (kg) & Wheel diameter (mm) \\
+    \hline
+    Mazda 1.5   & 0 & 1550 & 730 \\
+    Subaru 20   & 1 & 2100 & 832 \\
+    Kawasaki M. & 0 &  550 & 912 \\
+    Java 350cc  & 1 &  312 & 1010 \\
+    \hline
+    \end{tabular}
+  \end{block}
+  \begin{block}{Horizontal concatenation $(\pi)$}
+    \begin{tabular}{l|r|rrrr}
+    Vehicle & Sport & Car W & Car WD & Bike W & Bike WD \\
+    \hline
+    Mazda 1.5   & 0 & 1550 & 730 &   - &    - \\
+    Subaru 20   & 1 & 2100 & 832 &   - &    - \\
+    Kawasaki M. & 0 &    - &   - & 550 &  912 \\
+    Java 350cc  & 1 &    - &   - & 312 & 1010 \\
+    \hline
+    \end{tabular}
+  \end{block}
+\end{frame}
+
+\subsection{Multiple data sources}
+\begin{frame}{Sport cars}
+  \begin{columns}[c]
+  \begin{column}{.5\textwidth}
+    \begin{block}{Data from the manufacturer}
+      \begin{tabular}{l|r|rr}
+      Car & Sport & W & WD \\
+      \hline
+      Mazda  & 0 & 1550 & 730 \\
+      Subaru & 1 & 2100 & 832 \\
+      \hline
+      \end{tabular}
+    \end{block}
+    \begin{block}{Data from evaluation website}
+      \begin{tabular}{l|r|rr}
+      Car & Sp & MPG & Power \\
+      \hline
+      Mazda  & 0 & 15 &  730 \\
+      Subaru & 1 & 10 & 1280 \\
+      \hline
+      \end{tabular}
+    \end{block}
+  \end{column}
+  \begin{column}{.5\textwidth}
+    \begin{block}{Data from forum on cars}
+      \begin{tabular}{l|r|rr}
+      Car & Sp & Reliab. & Drive \\
+      \hline
+      Mazda  & 0 & 6.3 & 7.9 \\
+      Subaru & 0 & 7.2 & 7.9 \\
+      \hline
+      \end{tabular}
+    \end{block}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Vertical concatenation}
+  \begin{block}{Car data}
+    \begin{tabular}{l|r|rrrrrr}
+    Car & Sport & W & WD & MPG & Power & Reliab. & Drive \\
+    \hline
+    Mazda  & 0 & 1550 & 730 & 15 &  730 & 6.3 & 7.9 \\
+    Subaru & 1 & 2100 & 832 & 10 & 1280 & 7.2 & 7.9 \\
+    \hline
+    \end{tabular}
+  \end{block}
+  \pause
+  Horizontal concatenation does not make sense in this case.
+
+  This is a form of \emph{early integration}.
+
+\end{frame}
+
+\section{Classification of data integration}
+
+\subsection{General}
+\begin{frame}{Classification by concept}
+  \begin{description}
+    \item[Early integration] \hfill \\
+    \pause
+    \begin{itemize}
+      \item Concatenates data before processing
+      \item Happens before classification
+    \end{itemize}
+    \pause
+    \item[Late integration] \hfill \\
+    \pause
+    \begin{itemize}
+      \item Classifies data before integration
+      \item Integration happens by combining classifier output
+      \item e.g. majority vote or cummulative vote
+    \end{itemize}
+    \pause
+    \item[Intermediate integration] \hfill \\
+    \pause
+    \begin{itemize}
+      \item More complex than early and late integration
+      \item Combines the data assigning \emph{weights} to measures
+      \item There are several ways to assign such weights
+    \end{itemize}
+  \end{description}
+\end{frame}
+
+\subsection{Techniques}
+\begin{frame}{Classification by technique}
+  Early and late integrations are rather simple, therefore we discuss
+  intermediate integration for here on.
+  \pause
+  \begin{itemize}
+    \item Clustering (Parallel clustering)
+    \item Euclidean distance (MDS)
+    \item Graph techniques (SNF, SC)
+    \item Bayesian Networks (Bayesian correlation)
+    \item Vectorial space (PLS)
+  \end{itemize}
+\end{frame}
+
+\section{Work plan}
+
+\subsection{Multi'omics}
+\begin{frame}{Multi'omics}
+  \begin{itemize}
+    \item Lots of biological data, e.g. TCGA
+    \item AI problems with multi'omics
+      \begin{itemize}
+        \item Feature extraction process is much more needed than data
+              integration in multi'omics
+        \item AI cannot solve a problem that a human cannot solve
+      \end{itemize}
+    \pause
+    \item Feature extraction need to be done in possession of some expert
+          knowledge of the area
+    \item Visualisation techniques may help in this
+    \item AI will not solve the lack of understanding in the area, AI can be
+          used to prove/reject specific hypotheses in the area
+  \end{itemize}
+\end{frame}
+
+\subsection{Plans}
+\begin{frame}{Some possible outlines}
+  \begin{columns}[T]
+  \begin{column}{.5\textwidth}
+    \begin{block}{Plan A}
+      \begin{itemize}
+       \item[Jan] SNF and MDS on GBM
+       \item[Feb] Graph dimensions in both techniques
+       \item[Mar] ...
+      \end{itemize}
+    \end{block}
+    \begin{block}{Plan C (example)}
+      \begin{itemize}
+       \item[Jan] ELF header
+       \item[Feb] Test environment and prototype build
+       \item[Mar] Test the pototype and some simple bindings
+      \end{itemize}
+    \end{block}
+  \end{column}
+  \begin{column}{.5\textwidth}
+    \begin{block}{Plan B}
+      \begin{itemize}
+       \item[Jan] Distributed SNF diagram
+       \item[Feb] Implementation and testing of distribution
+       \item[Mar] Failure resistence and optimisation
+       \item[Apr] Documentation
+      \end{itemize}
+    \end{block}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\subsection{Current work}
+\begin{frame}{Outline of a workplan design}
+\begin{description}
+  \item[What?] \hfill \\
+  \begin{itemize}
+    \item Problem
+    \item How to measure it
+    \item If we cannot measure it, get a different problem
+  \end{itemize}
+  \pause
+  \item[Why?] \hfill \\
+  \begin{itemize}
+    \item Why a solution to this problem is desirable
+  \end{itemize}
+  \item[How?] \hfill \\
+  \begin{itemize}
+    \item This is easy
+  \end{itemize}
+\end{description}
 \end{frame}
 
 \end{document}
