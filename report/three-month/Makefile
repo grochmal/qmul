@@ -20,7 +20,13 @@ three-month.pdf: three-month.tex three-month.bbl
 	$(LATEX) $<
 	$(LATEX) $<
 
+# beamer needs three passes:
+# one to generate .aux
+# one to generate \tableofcontents with pausesections
+# and one to correct \tableofcontents with the moved pages
+# after pausesections
 %.pdf: %.tex
+	$(LATEX) $<
 	$(LATEX) $<
 	$(LATEX) $<
 
