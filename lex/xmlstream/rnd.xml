@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE random.dtd>
+<random>
+  <myprogs on="capybara" />
+  <myprogs on="samson">
+    <prog>xml stream
+    and EH script
+    </prog>
+    <prog><[CDATA
+      <?xml?>
+      <!-- comment -->
+      <crappy tag>
+    ]>
+    </prog>
+  </myprogs>
+</rnadom>
+

